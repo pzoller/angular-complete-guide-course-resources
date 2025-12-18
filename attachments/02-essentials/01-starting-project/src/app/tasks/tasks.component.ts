@@ -14,8 +14,7 @@ import { TaskService } from './tasks.service';
   styleUrl: './tasks.component.css'
 })
 export class TasksComponent {
-  @Input({ required: true }) user!: User | undefined;
-  // @Input({ required: true }) userId!: string;
+  @Input({ required: true }) user!: User;
 
   isAddingTask = false;
 
@@ -25,19 +24,11 @@ export class TasksComponent {
     return this.taskService.getUserTasks(this.user?.id ?? '');
   }
 
-  onTaskCompleted(id: string) {
-    // this.tasks = this.tasks.filter(task => task.id !== id);
-  }
-
   onStartNewTask() {
     this.isAddingTask = true;
   }
 
-  onCancelNewTask() {
+  onCloseNewTask() {
     this.isAddingTask = false;
   }
-
-  onCreateNewTask(taskInput: TaskInput) {
-  }
-
 }

@@ -5,6 +5,7 @@ import { Task, type TaskInput } from './task/task.model';
   providedIn: 'root',
 })
 export class TaskService {
+
   private tasks = [
     {
       id: 't1',
@@ -31,10 +32,19 @@ export class TaskService {
     },
   ];
 
-  isAddingTask = false;
+  constructor() {
+    const storedTasks = localStorage.getItem('tasks');
+    if (storedTasks) {
+      this.tasks = JSON.parse(storedTasks);
+    }
+  }
 
   public getUserTasks(userId: string) {
     return this.tasks.filter((task: Task) => task.userId === userId);
+  }
+
+  getTaskById(taskId: string): Task {
+    return this.tasks.find(task => task.id === taskId)!;
   }
 
   createTask(taskData: TaskInput, userId: string) {
@@ -46,10 +56,16 @@ export class TaskService {
       dueDate: taskData.dueDate,
     };
     this.tasks.push(task);
-    this.isAddingTask = false;
+    this.saveTasksToStorage();
+    return task;
   }
 
   deleteTask(id: string) {
     this.tasks = this.tasks.filter(task => task.id !== id);
+    this.saveTasksToStorage();
+  }
+
+  private saveTasksToStorage() {
+    localStorage.setItem('tasks', JSON.stringify(this.tasks));
   }
 }
